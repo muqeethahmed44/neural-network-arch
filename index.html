@@ -876,11 +876,406 @@
             <td><strong>Momentum</strong></td>
             <td>
               Adds a fraction of previous update to current update, helping
-              accelerate in relevant directions
+              accelerate in relevant directions and dampen oscillations.
+            </td>
+            <td>
+              Faster convergence than plain SGD, helps escape shallow local
+              minima
+            </td>
+            <td>
+              Introduces additional hyperparameter (momentum coefficient), can
+              overshoot minima
             </td>
           </tr>
         </table>
+
+        <h3 style="margin-top: 30px">Key Hyperparameters</h3>
+
+        <div class="component-grid">
+          <div class="component-card">
+            <h4 style="color: #667eea">Learning Rate</h4>
+            <p>
+              Controls the step size of weight updates. Too high, and the
+              network bounces around without converging. Too low, and training
+              takes forever or gets stuck. Typical values: 0.001 to 0.1. This is
+              often the most important hyperparameter to tune.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Batch Size</h4>
+            <p>
+              Number of training examples processed before updating weights.
+              Smaller batches (32-128) provide noisy but frequent updates.
+              Larger batches (256-1024) give stable gradients but slower
+              updates. Choice affects both training speed and final performance.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Epochs</h4>
+            <p>
+              Number of times the entire training dataset is passed through the
+              network. More epochs allow more learning but risk overfitting.
+              Typical range: 10-100+ epochs depending on dataset size and
+              complexity.
+            </p>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 30px">
+          <h4>Practical Insights from Neural Network Playground:</h4>
+          <p>
+            I experimented extensively with learning rates and observed dramatic
+            differences. With learning rate 0.001, the spiral dataset trained
+            slowly but steadily. At 0.1, the loss oscillated wildly and never
+            converged properly. At 0.01, I found the sweet spot where training
+            was both fast and stable. I also noticed that Adam optimizer
+            consistently outperformed SGD on complex patterns, converging in
+            fewer epochs. For noisy datasets, slower learning rates with more
+            epochs produced better generalization than aggressive learning
+            rates.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 10: Putting It All Together -->
+      <div class="slide">
+        <h2>How Components Work Together</h2>
+
+        <div class="architecture-diagram">
+          <h3 style="color: #667eea; margin-bottom: 20px">
+            The Complete Training Cycle
+          </h3>
+
+          <div style="text-align: left; max-width: 900px; margin: 0 auto">
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 15px 0;
+                border-left: 5px solid #667eea;
+              "
+            >
+              <h4 style="color: #667eea; margin-bottom: 10px">
+                1. Forward Propagation
+              </h4>
+              <p style="line-height: 1.8">
+                Input data flows through layers. Each neuron computes a weighted
+                sum of its inputs, adds bias, and applies an activation
+                function. This process repeats layer by layer until reaching the
+                output layer, which produces predictions.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 15px 0;
+                border-left: 5px solid #764ba2;
+              "
+            >
+              <h4 style="color: #764ba2; margin-bottom: 10px">
+                2. Loss Calculation
+              </h4>
+              <p style="line-height: 1.8">
+                The loss function compares predictions to actual values,
+                producing a single number representing how wrong the network is.
+                This provides the feedback signal needed for learning.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 15px 0;
+                border-left: 5px solid #667eea;
+              "
+            >
+              <h4 style="color: #667eea; margin-bottom: 10px">
+                3. Backward Propagation
+              </h4>
+              <p style="line-height: 1.8">
+                Gradients (derivatives of loss with respect to each weight) are
+                calculated using the chain rule, flowing backward from output to
+                input layer. This determines how much each weight contributed to
+                the error.
+              </p>
+            </div>
+
+            <div
+              style="
+                background: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 15px 0;
+                border-left: 5px solid #764ba2;
+              "
+            >
+              <h4 style="color: #764ba2; margin-bottom: 10px">
+                4. Weight Update
+              </h4>
+              <p style="line-height: 1.8">
+                The optimization algorithm uses gradients to update weights in
+                the direction that reduces loss. The learning rate controls how
+                large these updates are. This cycle repeats thousands of times
+                until the network learns optimal weights.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 30px">
+          <h4>Analogy: Learning to Throw a Basketball</h4>
+          <p style="line-height: 1.8">
+            Training a neural network is like learning to shoot a basketball.
+            <strong>Layers</strong> are like the stages of your throw (stance,
+            aim, release, follow-through). <strong>Neurons</strong> are
+            individual muscle movements. <strong>Weights</strong> represent how
+            much force each muscle applies.
+            <strong>Activation functions</strong> decide when muscles activate.
+            The <strong>loss function</strong> measures how far your shot was
+            from the basket. The <strong>optimizer</strong> is your brain
+            adjusting muscle memory after each attempt. With practice
+            (training), you automatically adjust your form (weights) to
+            consistently make baskets (minimize loss).
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 11: Summary and Key Insights -->
+      <div class="slide">
+        <h2>Summary: Key Insights and Importance of Visualization</h2>
+
+        <h3 style="color: #667eea; margin-bottom: 20px">
+          Why Visualizing Neural Networks Matters
+        </h3>
+
+        <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 30px">
+          Visualizing neural networks transforms abstract mathematical concepts
+          into intuitive, understandable representations. Through the Neural
+          Network Playground experiments and creating this visual guide, I
+          gained profound insights that wouldn't have been possible through
+          theory alone. Visualization bridges the gap between equations and
+          understanding, making neural networks accessible and debuggable.
+        </p>
+
+        <div class="summary-grid">
+          <div class="insight-card">
+            <h4>Intuition Building</h4>
+            <p>
+              Seeing how neurons activate, weights strengthen, and decision
+              boundaries form provides intuition about what the network is
+              learning. This visual feedback helps identify when models are
+              underfitting, overfitting, or just right.
+            </p>
+          </div>
+
+          <div class="insight-card">
+            <h4>Debugging and Optimization</h4>
+            <p>
+              Visual tools reveal problems like vanishing gradients, dead
+              neurons, or poor weight initialization. Watching loss curves helps
+              detect overfitting early. Observing activation patterns identifies
+              layers that aren't learning effectively.
+            </p>
+          </div>
+
+          <div class="insight-card">
+            <h4>Hyperparameter Understanding</h4>
+            <p>
+              Experimenting with different architectures, learning rates, and
+              activation functions while seeing immediate visual feedback
+              accelerated my understanding of how these choices impact
+              performance. Theory explains what they do; visualization shows how
+              they work.
+            </p>
+          </div>
+
+          <div class="insight-card">
+            <h4>Communication Tool</h4>
+            <p>
+              Visual representations enable effective communication with
+              non-technical stakeholders. Instead of explaining backpropagation
+              mathematically, showing data flow diagrams makes neural networks
+              approachable to business leaders and clients.
+            </p>
+          </div>
+        </div>
+
+        <h3 style="color: #667eea; margin: 40px 0 20px 0">
+          Key Takeaways from This Exercise
+        </h3>
+
+        <div class="key-points">
+          <ul>
+            <li>
+              <strong>Architecture Matters:</strong> The number of layers and
+              neurons per layer significantly impacts learning capacity. More
+              complex datasets require deeper networks, but there's a point of
+              diminishing returns where additional complexity hurts more than
+              helps.
+            </li>
+
+            <li>
+              <strong>Non-linearity is Essential:</strong> Activation functions
+              enable neural networks to learn complex patterns. Without them,
+              even the deepest network reduces to simple linear regression,
+              incapable of solving problems like XOR or image classification.
+            </li>
+
+            <li>
+              <strong>Learning Rate is Critical:</strong> This single
+              hyperparameter can make the difference between successful training
+              and complete failure. Too high causes instability; too low causes
+              endless training. Finding the right value requires
+              experimentation.
+            </li>
+
+            <li>
+              <strong>Overfitting vs. Generalization:</strong> Networks can
+              memorize training data while performing poorly on new data.
+              Monitoring both training and test loss reveals this issue.
+              Techniques like regularization and early stopping help maintain
+              balance.
+            </li>
+
+            <li>
+              <strong>Data Quality Impacts Everything:</strong> Neural networks
+              are only as good as their training data. Noise, imbalanced
+              classes, and insufficient examples all limit what networks can
+              learn, regardless of architecture sophistication.
+            </li>
+
+            <li>
+              <strong>Experimentation is Key:</strong> There's no universal
+              formula for network design. Different problems require different
+              architectures, and finding optimal configurations involves
+              systematic experimentation and iterative refinement.
+            </li>
+          </ul>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 30px">
+          <h4>Personal Reflection on Learning:</h4>
+          <p style="line-height: 1.8">
+            Creating this visual guide while experimenting with the Neural
+            Network Playground provided a dual learning experience. The hands-on
+            experimentation made theoretical concepts tangible, while
+            articulating my understanding through visualization deepened my
+            comprehension. I moved from knowing definitions to truly
+            understanding how components interact to enable learning. This
+            exercise reinforced that machine learning isn't just
+            mathematics—it's an iterative process of hypothesis,
+            experimentation, observation, and refinement. The ability to
+            visualize what networks are learning will be invaluable as I develop
+            more complex AI systems throughout my career.
+          </p>
+        </div>
+      </div>
+
+      <!-- Slide 12: Applications and Future Directions -->
+      <div class="slide">
+        <h2>Real-World Applications</h2>
+
+        <p style="font-size: 1.1em; line-height: 1.8; margin-bottom: 30px">
+          Understanding neural network components enables building solutions for
+          diverse real-world problems:
+        </p>
+
+        <div class="component-grid">
+          <div class="component-card">
+            <h4 style="color: #667eea">Computer Vision</h4>
+            <p>
+              Image classification, object detection, facial recognition,
+              medical image analysis. CNNs with multiple convolutional layers
+              automatically learn visual features from raw pixels.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Natural Language Processing</h4>
+            <p>
+              Language translation, sentiment analysis, chatbots, text
+              generation. Recurrent networks and transformers process sequential
+              text data to understand context and meaning.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Predictive Analytics</h4>
+            <p>
+              Stock price prediction, demand forecasting, credit risk
+              assessment. Feed-forward networks learn complex non-linear
+              relationships in tabular data that traditional methods miss.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Recommendation Systems</h4>
+            <p>
+              Product recommendations, content personalization, targeted
+              advertising. Neural networks learn user preferences from behavior
+              patterns and predict future interests.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Autonomous Systems</h4>
+            <p>
+              Self-driving cars, robotics, game-playing AI. Deep reinforcement
+              learning combines neural networks with decision-making to learn
+              optimal actions through trial and error.
+            </p>
+          </div>
+
+          <div class="component-card">
+            <h4 style="color: #667eea">Healthcare</h4>
+            <p>
+              Disease diagnosis, drug discovery, treatment personalization,
+              patient outcome prediction. Networks analyze medical images,
+              genetic data, and patient histories to assist healthcare
+              providers.
+            </p>
+          </div>
+        </div>
+
+        <div class="highlight-box" style="margin-top: 40px">
+          <h4>Connection to My Career Goals:</h4>
+          <p style="line-height: 1.8">
+            My goal is to develop intelligent systems that solve complex
+            real-world problems. Understanding neural network fundamentals—from
+            neuron computations to optimization algorithms—provides the
+            foundation for building such systems. During my time at Accenture, I
+            worked on full-stack applications, but my passion lies in creating
+            AI-powered solutions. This deep dive into neural network
+            architecture prepares me to design models that are not only accurate
+            but also efficient, interpretable, and ethically developed. As I
+            continue my master's program, I'll apply these principles to
+            projects in NLP, computer vision, and predictive analytics, always
+            keeping in mind that effective AI development requires both
+            technical expertise and thoughtful design informed by visualization
+            and experimentation.
+          </p>
+        </div>
       </div>
     </div>
+
+    <footer>
+      <p>
+        <strong>Portfolio Artifact:</strong> Neural Network Architecture Visual
+        Guide
+      </p>
+      <p>AIML-501 Model Development | Indiana Wesleyan University</p>
+      <p>
+        Muqeeth Mohammad | Master of Science in Computer Information Systems (AI
+        Specialization)
+      </p>
+    </footer>
   </body>
 </html>
